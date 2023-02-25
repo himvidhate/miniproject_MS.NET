@@ -1,0 +1,108 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data.SqlClient;
+using System.Dynamic;
+
+namespace miniprojectp2_87.Pages.Car
+{
+
+    public class EditModel : PageModel
+    {
+        public CarInfo carInfo = new CarInfo();
+        public string errormessage = "";
+        public string successmessage = "";
+     
+        public void OnGet()
+        {
+            String id = Request.Query["id"]; 
+            try
+            {
+
+                string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=DotNetLab1;Integrated Security=True;Pooling=False";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    
+                    string Sql =
+                        "SELECT * from Cars where id =@id";
+
+                    using (SqlCommand command = new SqlCommand(Sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        using(SqlDataReader reader = command.ExecuteReader()) {
+                            if(reader.Read())
+                            {
+                                
+                                carInfo.id = "" + reader.GetInt32(0);
+                                carInfo.modelname = reader.GetString(1);
+                                carInfo.manufacturer = reader.GetString(2);
+                                carInfo.engine = reader.GetString(3);
+                                carInfo.fueltype = reader.GetString(4);
+                                carInfo.price = reader.GetString(5);
+
+                            }
+
+                        }
+
+
+                        
+                    }
+                }
+
+            }
+            catch (Exception ex) { 
+                errormessage = ex.Message;
+            }
+        }
+        public void OnPost()
+        {
+            carInfo.id = Request.Form["id"];
+            carInfo.modelname = Request.Form["modelname"];
+            carInfo.manufacturer = Request.Form["manufacturer"];
+            carInfo.engine = Request.Form["engine"];
+            carInfo.fueltype = Request.Form["fueltype"];
+            carInfo.price = Request.Form["price"];
+
+
+
+            if (carInfo.id.Length == 0 | carInfo.modelname.Length == 0 || carInfo.manufacturer.Length == 0 ||
+               carInfo.engine.Length == 0 || carInfo.fueltype.Length == 0 || carInfo.price.Length == 0)
+            {
+                errormessage = "field required";
+                return;
+            }
+
+            try
+            {
+                string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=DotNetLab1;Integrated Security=True;Pooling=False";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    String Sql = "UPDATE Cars " +
+                              "set modelname=@modelname,manufacturer=@manufacturer,engine=@engine,fueltype=@fueltype,price=@price" +
+                              " where id=@id";
+                                 
+
+                    using (SqlCommand command = new SqlCommand(Sql, connection))
+                    {
+
+
+                        command.Parameters.AddWithValue("@modelname", carInfo.modelname);
+                        command.Parameters.AddWithValue("@manufacturer", carInfo.manufacturer);
+                        command.Parameters.AddWithValue("@engine", carInfo.engine);
+                        command.Parameters.AddWithValue("@fueltype", carInfo.fueltype);
+                        command.Parameters.AddWithValue("@price", carInfo.price);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errormessage = ex.Message;
+                return;
+            }
+            Response.Redirect("/Car/Index");
+
+        }
+    }
+}

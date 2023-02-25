@@ -1,0 +1,65 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data.SqlClient;
+
+namespace miniprojectp2_87.Pages.Car
+{
+    public class CreateModel : PageModel
+    {
+        public CarInfo carInfo = new CarInfo();
+        public string errormessage = "";
+        public string successmessage = "";
+        public void OnGet()
+        {
+        }
+        public void OnPost() 
+        {
+            carInfo.modelname = Request.Form["modelname"];
+            carInfo.manufacturer = Request.Form["manufacturer"];
+            carInfo.engine = Request.Form["engine"];
+            carInfo.fueltype = Request.Form["fueltype"];
+            carInfo.price = Request.Form["price"];
+
+            if (carInfo.modelname.Length == 0 || carInfo.manufacturer.Length == 0 ||
+                carInfo.engine.Length == 0 || carInfo.fueltype.Length == 0 || carInfo.price.Length == 0)
+            {
+                errormessage = "field required";
+                return;
+            }
+
+            try
+            {
+                string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=DotNetLab1;Integrated Security=True;Pooling=False";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                { 
+                    connection.Open();
+                    String Sql = "INSERT into Cars" +
+                                 "(modelname,manufacturer,engine,fueltype,price) VALUES" +
+                                 "(@modelname,@manufacturer,@engine,@fueltype,@price);";
+                                 
+                    using (SqlCommand command = new SqlCommand(Sql, connection))
+                    {
+                        
+
+                        command.Parameters.AddWithValue("@modelname",carInfo.modelname);
+                        command.Parameters.AddWithValue("@manufacturer", carInfo.manufacturer);
+                        command.Parameters.AddWithValue("@engine", carInfo.engine);
+                        command.Parameters.AddWithValue("@fueltype", carInfo.fueltype);
+                        command.Parameters.AddWithValue("@price", carInfo.price);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errormessage = ex.Message;
+                return;
+            }
+            
+                successmessage = "new car added";
+            Response.Redirect("/Car/Index");
+
+
+        }
+    }
+}

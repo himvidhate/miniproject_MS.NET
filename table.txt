@@ -1,0 +1,8 @@
+CREATE TABLE Cars (
+    ID INT NOT NULL PRIMARY KEY identity,
+    modelname VARCHAR (100) NULL,
+    manufacturer VARCHAR (150) NULL,
+    engine VARCHAR(20) NULL,
+    fueltype VARCHAR(100) NULL,
+    price VARCHAR(100) NULL,
+);

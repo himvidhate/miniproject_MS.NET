@@ -1,0 +1,45 @@
+@page
+@model miniprojectp2_87.Pages.Car.IndexModel
+@{
+}
+
+<br>
+
+<h2>Car List</h2>
+<a class='btn btn-primary btn-sm' href='/Car/Create'>Add New Car</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>id</th>
+            <th>manufacturer</th>
+        <th>modelname</th>
+        
+        <th>engine</th>
+        <th>fueltype</th>
+        <th>price</th>
+
+    </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.carinfo)
+        {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.manufacturer</td>
+                <td>@item.modelname</td>
+               
+                <td>@item.engine</td>
+                <td>@item.fueltype</td>
+                <td>@item.price</td>
+                <td>
+
+                    <a class='btn btn-primary btn-sm' href="/Car/Edit?id=@item.id">edit</a>
+                         <a class='btn btn-danger btn-sm' href='/Car/Delete?id=@item.id'>delete</a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

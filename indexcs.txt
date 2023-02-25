@@ -1,0 +1,59 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data.SqlClient;
+
+namespace miniprojectp2_87.Pages.Car
+{
+    public class IndexModel : PageModel
+    {
+        public List<CarInfo> carinfo = new List<CarInfo>();
+        public void OnGet()
+        {
+            try
+            {
+                string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=DotNetLab1;Integrated Security=True;Pooling=False";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    String sql = "Select * from cars";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                CarInfo carInfocarInfo = new CarInfo();
+                                carInfocarInfo.id = "" + reader.GetInt32(0);
+                                carInfocarInfo.modelname = reader.GetString(1); 
+                                carInfocarInfo.manufacturer = reader.GetString(2);  
+                                carInfocarInfo.engine = reader.GetString(3);    
+                                carInfocarInfo.fueltype = reader.GetString(4);  
+                                carInfocarInfo.price = reader.GetString(5);
+
+                                carinfo.Add(carInfocarInfo);
+                            }
+                        }
+                    }
+                }
+                    }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
+
+        }
+    }
+
+    public class CarInfo
+    {
+        public string id;
+        public string modelname;
+        public string manufacturer;
+        public string engine;
+        public string fueltype;
+        public string price;
+    }
+}

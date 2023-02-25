@@ -1,0 +1,82 @@
+@page
+@model miniprojectp2_87.Pages.Car.CreateModel
+@{
+}
+
+<br>
+
+<h3>New Car</h3>
+
+@if (Model.errormessage.Length > 0)
+{
+    <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+        <strong>@Model.errormessage</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-lebel='close'></button>
+    </div>
+}
+
+<form method="post">
+ 
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">model</label>
+        <div class="col-sm-6" >
+            <input type="text" class="form-control" name="modelname" value="@Model.carInfo.modelname" >
+        </div>   
+        </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">manufacturer</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="manufacturer" value="@Model.carInfo.manufacturer">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">engine</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="engine" value="@Model.carInfo.engine">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">fueltype</label>
+        <div class="col-sm-6" >
+            <input type="text" class="form-control" name="fueltype" value="@Model.carInfo.fueltype">
+        </div>   
+        </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">price</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="price" value="@Model.carInfo.price">
+        </div>
+        </div>
+
+
+
+    @if (Model.successmessage.Length > 0)
+    {
+        <div class='row mb-3'>
+            <div class="col-sm-9">
+                    <div class='alert alert-success alert-dismissible fade show' role='alert'>
+
+            <strong>@Model.successmessage</strong>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-lebel='close'></button>
+            </div>
+        </div>
+        </div>
+    }
+
+
+
+        <div class="row mb-3">
+       
+            <div class="offset-sm-3 col-sm-3 d-grid">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+
+        </div>
+    
+</form>
